@@ -7,20 +7,20 @@ part of 'moor_service.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class NoteData extends DataClass implements Insertable<NoteData> {
+class Note extends DataClass implements Insertable<Note> {
   final int id;
   final String title;
   final String body;
   final int? category;
-  NoteData(
+  Note(
       {required this.id,
       required this.title,
       required this.body,
       this.category});
-  factory NoteData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Note.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return NoteData(
+    return Note(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       title: const StringType()
@@ -43,8 +43,8 @@ class NoteData extends DataClass implements Insertable<NoteData> {
     return map;
   }
 
-  NoteCompanion toCompanion(bool nullToAbsent) {
-    return NoteCompanion(
+  NotesCompanion toCompanion(bool nullToAbsent) {
+    return NotesCompanion(
       id: Value(id),
       title: Value(title),
       body: Value(body),
@@ -54,10 +54,10 @@ class NoteData extends DataClass implements Insertable<NoteData> {
     );
   }
 
-  factory NoteData.fromJson(Map<String, dynamic> json,
+  factory Note.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return NoteData(
+    return Note(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       body: serializer.fromJson<String>(json['body']),
@@ -75,8 +75,7 @@ class NoteData extends DataClass implements Insertable<NoteData> {
     };
   }
 
-  NoteData copyWith({int? id, String? title, String? body, int? category}) =>
-      NoteData(
+  Note copyWith({int? id, String? title, String? body, int? category}) => Note(
         id: id ?? this.id,
         title: title ?? this.title,
         body: body ?? this.body,
@@ -84,7 +83,7 @@ class NoteData extends DataClass implements Insertable<NoteData> {
       );
   @override
   String toString() {
-    return (StringBuffer('NoteData(')
+    return (StringBuffer('Note(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
@@ -99,32 +98,32 @@ class NoteData extends DataClass implements Insertable<NoteData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is NoteData &&
+      (other is Note &&
           other.id == this.id &&
           other.title == this.title &&
           other.body == this.body &&
           other.category == this.category);
 }
 
-class NoteCompanion extends UpdateCompanion<NoteData> {
+class NotesCompanion extends UpdateCompanion<Note> {
   final Value<int> id;
   final Value<String> title;
   final Value<String> body;
   final Value<int?> category;
-  const NoteCompanion({
+  const NotesCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.body = const Value.absent(),
     this.category = const Value.absent(),
   });
-  NoteCompanion.insert({
+  NotesCompanion.insert({
     this.id = const Value.absent(),
     required String title,
     required String body,
     this.category = const Value.absent(),
   })  : title = Value(title),
         body = Value(body);
-  static Insertable<NoteData> custom({
+  static Insertable<Note> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? body,
@@ -138,12 +137,12 @@ class NoteCompanion extends UpdateCompanion<NoteData> {
     });
   }
 
-  NoteCompanion copyWith(
+  NotesCompanion copyWith(
       {Value<int>? id,
       Value<String>? title,
       Value<String>? body,
       Value<int?>? category}) {
-    return NoteCompanion(
+    return NotesCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
@@ -171,7 +170,7 @@ class NoteCompanion extends UpdateCompanion<NoteData> {
 
   @override
   String toString() {
-    return (StringBuffer('NoteCompanion(')
+    return (StringBuffer('NotesCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
@@ -181,10 +180,10 @@ class NoteCompanion extends UpdateCompanion<NoteData> {
   }
 }
 
-class $NoteTable extends Note with TableInfo<$NoteTable, NoteData> {
+class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $NoteTable(this._db, [this._alias]);
+  $NotesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedIntColumn id = _constructId();
@@ -229,13 +228,13 @@ class $NoteTable extends Note with TableInfo<$NoteTable, NoteData> {
   @override
   List<GeneratedColumn> get $columns => [id, title, body, category];
   @override
-  $NoteTable get asDslTable => this;
+  $NotesTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'note';
+  String get $tableName => _alias ?? 'notes';
   @override
-  final String actualTableName = 'note';
+  final String actualTableName = 'notes';
   @override
-  VerificationContext validateIntegrity(Insertable<NoteData> instance,
+  VerificationContext validateIntegrity(Insertable<Note> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -264,31 +263,31 @@ class $NoteTable extends Note with TableInfo<$NoteTable, NoteData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  NoteData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return NoteData.fromData(data, _db,
+  Note map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Note.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $NoteTable createAlias(String alias) {
-    return $NoteTable(_db, alias);
+  $NotesTable createAlias(String alias) {
+    return $NotesTable(_db, alias);
   }
 }
 
-class CategoryData extends DataClass implements Insertable<CategoryData> {
+class Category extends DataClass implements Insertable<Category> {
   final int id;
   final String name;
   final int icon;
   final int color;
-  CategoryData(
+  Category(
       {required this.id,
       required this.name,
       required this.icon,
       required this.color});
-  factory CategoryData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Category.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return CategoryData(
+    return Category(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
@@ -309,8 +308,8 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
     return map;
   }
 
-  CategoryCompanion toCompanion(bool nullToAbsent) {
-    return CategoryCompanion(
+  CategoriesCompanion toCompanion(bool nullToAbsent) {
+    return CategoriesCompanion(
       id: Value(id),
       name: Value(name),
       icon: Value(icon),
@@ -318,10 +317,10 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
     );
   }
 
-  factory CategoryData.fromJson(Map<String, dynamic> json,
+  factory Category.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return CategoryData(
+    return Category(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       icon: serializer.fromJson<int>(json['icon']),
@@ -339,8 +338,7 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
     };
   }
 
-  CategoryData copyWith({int? id, String? name, int? icon, int? color}) =>
-      CategoryData(
+  Category copyWith({int? id, String? name, int? icon, int? color}) => Category(
         id: id ?? this.id,
         name: name ?? this.name,
         icon: icon ?? this.icon,
@@ -348,7 +346,7 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
       );
   @override
   String toString() {
-    return (StringBuffer('CategoryData(')
+    return (StringBuffer('Category(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('icon: $icon, ')
@@ -363,25 +361,25 @@ class CategoryData extends DataClass implements Insertable<CategoryData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CategoryData &&
+      (other is Category &&
           other.id == this.id &&
           other.name == this.name &&
           other.icon == this.icon &&
           other.color == this.color);
 }
 
-class CategoryCompanion extends UpdateCompanion<CategoryData> {
+class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> icon;
   final Value<int> color;
-  const CategoryCompanion({
+  const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.icon = const Value.absent(),
     this.color = const Value.absent(),
   });
-  CategoryCompanion.insert({
+  CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int icon,
@@ -389,7 +387,7 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
   })  : name = Value(name),
         icon = Value(icon),
         color = Value(color);
-  static Insertable<CategoryData> custom({
+  static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? icon,
@@ -403,12 +401,12 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
     });
   }
 
-  CategoryCompanion copyWith(
+  CategoriesCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? icon,
       Value<int>? color}) {
-    return CategoryCompanion(
+    return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       icon: icon ?? this.icon,
@@ -436,7 +434,7 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
 
   @override
   String toString() {
-    return (StringBuffer('CategoryCompanion(')
+    return (StringBuffer('CategoriesCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('icon: $icon, ')
@@ -446,11 +444,11 @@ class CategoryCompanion extends UpdateCompanion<CategoryData> {
   }
 }
 
-class $CategoryTable extends Category
-    with TableInfo<$CategoryTable, CategoryData> {
+class $CategoriesTable extends Categories
+    with TableInfo<$CategoriesTable, Category> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $CategoryTable(this._db, [this._alias]);
+  $CategoriesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedIntColumn id = _constructId();
@@ -495,13 +493,13 @@ class $CategoryTable extends Category
   @override
   List<GeneratedColumn> get $columns => [id, name, icon, color];
   @override
-  $CategoryTable get asDslTable => this;
+  $CategoriesTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'category';
+  String get $tableName => _alias ?? 'categories';
   @override
-  final String actualTableName = 'category';
+  final String actualTableName = 'categories';
   @override
-  VerificationContext validateIntegrity(Insertable<CategoryData> instance,
+  VerificationContext validateIntegrity(Insertable<Category> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -532,25 +530,25 @@ class $CategoryTable extends Category
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  CategoryData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return CategoryData.fromData(data, _db,
+  Category map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Category.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $CategoryTable createAlias(String alias) {
-    return $CategoryTable(_db, alias);
+  $CategoriesTable createAlias(String alias) {
+    return $CategoriesTable(_db, alias);
   }
 }
 
-class PhotoData extends DataClass implements Insertable<PhotoData> {
+class Photo extends DataClass implements Insertable<Photo> {
   final int id;
   final String path;
-  PhotoData({required this.id, required this.path});
-  factory PhotoData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  Photo({required this.id, required this.path});
+  factory Photo.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return PhotoData(
+    return Photo(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       path: const StringType()
@@ -565,17 +563,17 @@ class PhotoData extends DataClass implements Insertable<PhotoData> {
     return map;
   }
 
-  PhotoCompanion toCompanion(bool nullToAbsent) {
-    return PhotoCompanion(
+  PhotosCompanion toCompanion(bool nullToAbsent) {
+    return PhotosCompanion(
       id: Value(id),
       path: Value(path),
     );
   }
 
-  factory PhotoData.fromJson(Map<String, dynamic> json,
+  factory Photo.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return PhotoData(
+    return Photo(
       id: serializer.fromJson<int>(json['id']),
       path: serializer.fromJson<String>(json['path']),
     );
@@ -589,13 +587,13 @@ class PhotoData extends DataClass implements Insertable<PhotoData> {
     };
   }
 
-  PhotoData copyWith({int? id, String? path}) => PhotoData(
+  Photo copyWith({int? id, String? path}) => Photo(
         id: id ?? this.id,
         path: path ?? this.path,
       );
   @override
   String toString() {
-    return (StringBuffer('PhotoData(')
+    return (StringBuffer('Photo(')
           ..write('id: $id, ')
           ..write('path: $path')
           ..write(')'))
@@ -607,21 +605,21 @@ class PhotoData extends DataClass implements Insertable<PhotoData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is PhotoData && other.id == this.id && other.path == this.path);
+      (other is Photo && other.id == this.id && other.path == this.path);
 }
 
-class PhotoCompanion extends UpdateCompanion<PhotoData> {
+class PhotosCompanion extends UpdateCompanion<Photo> {
   final Value<int> id;
   final Value<String> path;
-  const PhotoCompanion({
+  const PhotosCompanion({
     this.id = const Value.absent(),
     this.path = const Value.absent(),
   });
-  PhotoCompanion.insert({
+  PhotosCompanion.insert({
     this.id = const Value.absent(),
     required String path,
   }) : path = Value(path);
-  static Insertable<PhotoData> custom({
+  static Insertable<Photo> custom({
     Expression<int>? id,
     Expression<String>? path,
   }) {
@@ -631,8 +629,8 @@ class PhotoCompanion extends UpdateCompanion<PhotoData> {
     });
   }
 
-  PhotoCompanion copyWith({Value<int>? id, Value<String>? path}) {
-    return PhotoCompanion(
+  PhotosCompanion copyWith({Value<int>? id, Value<String>? path}) {
+    return PhotosCompanion(
       id: id ?? this.id,
       path: path ?? this.path,
     );
@@ -652,7 +650,7 @@ class PhotoCompanion extends UpdateCompanion<PhotoData> {
 
   @override
   String toString() {
-    return (StringBuffer('PhotoCompanion(')
+    return (StringBuffer('PhotosCompanion(')
           ..write('id: $id, ')
           ..write('path: $path')
           ..write(')'))
@@ -660,10 +658,10 @@ class PhotoCompanion extends UpdateCompanion<PhotoData> {
   }
 }
 
-class $PhotoTable extends Photo with TableInfo<$PhotoTable, PhotoData> {
+class $PhotosTable extends Photos with TableInfo<$PhotosTable, Photo> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $PhotoTable(this._db, [this._alias]);
+  $PhotosTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedIntColumn id = _constructId();
@@ -686,13 +684,13 @@ class $PhotoTable extends Photo with TableInfo<$PhotoTable, PhotoData> {
   @override
   List<GeneratedColumn> get $columns => [id, path];
   @override
-  $PhotoTable get asDslTable => this;
+  $PhotosTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'photo';
+  String get $tableName => _alias ?? 'photos';
   @override
-  final String actualTableName = 'photo';
+  final String actualTableName = 'photos';
   @override
-  VerificationContext validateIntegrity(Insertable<PhotoData> instance,
+  VerificationContext validateIntegrity(Insertable<Photo> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -711,24 +709,25 @@ class $PhotoTable extends Photo with TableInfo<$PhotoTable, PhotoData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  PhotoData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return PhotoData.fromData(data, _db,
+  Photo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Photo.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $PhotoTable createAlias(String alias) {
-    return $PhotoTable(_db, alias);
+  $PhotosTable createAlias(String alias) {
+    return $PhotosTable(_db, alias);
   }
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  late final $NoteTable note = $NoteTable(this);
-  late final $CategoryTable category = $CategoryTable(this);
-  late final $PhotoTable photo = $PhotoTable(this);
+  late final $NotesTable notes = $NotesTable(this);
+  late final $CategoriesTable categories = $CategoriesTable(this);
+  late final $PhotosTable photos = $PhotosTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [note, category, photo];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [notes, categories, photos];
 }

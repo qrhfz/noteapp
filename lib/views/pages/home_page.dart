@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:noteapp/controllers/note_controller.dart';
+import 'package:noteapp/services/moor_service.dart';
 import 'package:noteapp/utils/myhelper.dart';
 import 'package:noteapp/views/pages/note_page.dart';
 import 'package:noteapp/views/widgets/category_icon.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+  HomePage({Key? key}) : super(key: key);
+  final NoteController noteController = Get.put(NoteController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,26 +16,53 @@ class HomePage extends StatelessWidget {
         title: const Text('Notes'),
       ),
       body: Center(
-        child: ListView.builder(
-          itemBuilder: _itemBuilder,
-          itemCount: 12,
+        child: FutureBuilder(
+          future: noteController.getAllNote(),
+          builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
+            if (snapshot.hasData) {
+              final data = snapshot.data;
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final title = data![index].title;
+                  final body = data[index].body;
+                  return NoteListTile(title: title, body: body);
+                },
+                itemCount: data!.length,
+              );
+            } else if (snapshot.hasError) {
+              return const Text('error');
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const NotePage()),
+        onPressed: () => Get.to(() => NotePage()),
         child: const Icon(Icons.create),
       ),
     );
   }
+}
 
-  Widget _itemBuilder(BuildContext context, int index) {
+class NoteListTile extends StatelessWidget {
+  const NoteListTile({
+    Key? key,
+    required this.title,
+    required this.body,
+  }) : super(key: key);
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
-      title: Text('Test $index'),
-      subtitle: Text(MyHelper.truncate(
-          'h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 ', 48)),
-      leading: CategoryIcon(
-        iconIndex: index % 6,
-        colorIndex: index % 9,
+      title: Text(title.isEmpty ? 'Empty title' : title),
+      subtitle: Text(MyHelper.truncate(body, 48)),
+      leading: const CategoryIcon(
+        iconIndex: 0,
+        colorIndex: 0,
       ),
     );
   }

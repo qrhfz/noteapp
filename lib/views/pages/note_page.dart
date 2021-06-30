@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:noteapp/controllers/note_controller.dart';
 
 class NotePage extends StatelessWidget {
-  const NotePage({Key? key}) : super(key: key);
-
+  NotePage({Key? key}) : super(key: key);
+  final _titleTextController = TextEditingController();
+  final _bodyTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final NoteController controller = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: const Text('View Note'),
+        actions: [
+          IconButton(
+              onPressed: () => controller.saveNote(
+                  _titleTextController.text, _bodyTextController.text),
+              icon: const Icon(Icons.save))
+        ],
       ),
-      // bottomSheet: Row(
-      //   children: [IconButton(onPressed: () {}, icon: Icon(Icons.attach_file))],
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -29,11 +36,13 @@ class NotePage extends StatelessWidget {
                       onPressed: () {}, icon: const Icon(Icons.attach_file))
                 ],
               ),
-              const TextField(
+              TextField(
+                controller: _titleTextController,
                 decoration: InputDecoration(hintText: 'Judul'),
               ),
               const SizedBox(height: 16),
-              const TextField(
+              TextField(
+                controller: _bodyTextController,
                 minLines: 10,
                 maxLines: null,
                 decoration: InputDecoration(hintText: 'Isi'),

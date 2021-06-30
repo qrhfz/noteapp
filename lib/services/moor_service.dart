@@ -21,7 +21,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [Note, Category, Photo])
+@UseMoor(tables: [Notes, Categories, Photos])
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
   MyDatabase() : super(_openConnection());
@@ -31,7 +31,9 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future addNote(NoteCompanion entry) {
-    return into(note).insert(entry);
+  Future<List<Note>> get allNoteEntries => select(notes).get();
+
+  Future addNote(NotesCompanion entry) {
+    return into(notes).insert(entry);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:moor/moor.dart';
 
-class Note extends Table {
+class Notes extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();
   TextColumn get body => text()();
