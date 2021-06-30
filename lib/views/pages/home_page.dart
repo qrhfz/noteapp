@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:noteapp/consts/app_category_icon.dart';
+import 'package:get/get.dart';
+import 'package:noteapp/utils/myhelper.dart';
+import 'package:noteapp/views/pages/note_page.dart';
 import 'package:noteapp/views/widgets/category_icon.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +19,18 @@ class HomePage extends StatelessWidget {
           itemCount: 12,
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.to(() => const NotePage()),
+        child: const Icon(Icons.create),
+      ),
     );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
     return ListTile(
       title: Text('Test $index'),
-      subtitle: const Text('bla bla bla'),
+      subtitle: Text(MyHelper.truncate(
+          'h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 h3h3 ', 48)),
       leading: CategoryIcon(
         iconIndex: index % 6,
         colorIndex: index % 9,

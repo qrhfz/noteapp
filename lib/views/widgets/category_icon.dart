@@ -18,9 +18,9 @@ class CategoryIcon extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           border: Border.all(width: 2, color: Colors.white),
-          color: AppCategoryIcon.colors[colorIndex]),
+          color: noteCategoryColors[colorIndex]),
       child: Icon(
-        AppCategoryIcon.icons[iconIndex],
+        noteCategoryIcons[iconIndex],
         color: Colors.white,
       ),
     );
