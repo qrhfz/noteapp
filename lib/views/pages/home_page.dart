@@ -25,7 +25,10 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final title = data![index].title;
                   final body = data[index].body;
-                  return NoteListTile(title: title, body: body);
+                  final id = data[index].id;
+                  return GestureDetector(
+                      onTap: () => Get.to(() => NotePage(), arguments: id),
+                      child: NoteListTile(title: title, body: body));
                 },
                 itemCount: data!.length,
               );

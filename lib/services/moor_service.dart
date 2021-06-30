@@ -33,7 +33,19 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Note>> get allNoteEntries => select(notes).watch();
 
+  Future<Note> getNoteEntry(int id) {
+    return (select(notes)..where((tbl) => tbl.id.equals(id))).getSingle();
+  }
+
   Future addNote(NotesCompanion entry) {
     return into(notes).insert(entry);
+  }
+
+  Future updateNote(NotesCompanion entry) {
+    return update(notes).replace(entry);
+  }
+
+  Future<void> createOrUpdateNote(Note note) {
+    return into(notes).insertOnConflictUpdate(note);
   }
 }

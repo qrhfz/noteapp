@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/controllers/note_controller.dart';
+import 'package:noteapp/controllers/note_page_controller.dart';
 
 class NotePage extends StatelessWidget {
   NotePage({Key? key}) : super(key: key);
   final _titleTextController = TextEditingController();
   final _bodyTextController = TextEditingController();
+  final NoteController noteController = Get.find();
+  final controller = Get.put(NotePageController());
+  final int? _id = Get.arguments as int?;
   @override
   Widget build(BuildContext context) {
-    final NoteController controller = Get.find();
+    if (_id != null) {
+      controller.id.value = _id!;
+      controller.getNoteContent();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('View Note'),
         actions: [
           IconButton(
-              onPressed: () => controller.saveNote(
-                  _titleTextController.text, _bodyTextController.text),
-              icon: const Icon(Icons.save))
+            onPressed: () => noteController.saveNote(
+                id: _id,
+                title: _titleTextController.text,
+                body: _bodyTextController.text),
+            icon: const Icon(Icons.save),
+          )
         ],
       ),
       body: Padding(
@@ -36,17 +47,23 @@ class NotePage extends StatelessWidget {
                       onPressed: () {}, icon: const Icon(Icons.attach_file))
                 ],
               ),
-              TextField(
-                controller: _titleTextController,
-                decoration: const InputDecoration(hintText: 'Judul'),
-              ),
+              Obx(() {
+                _titleTextController.text = controller.title.value;
+                return TextField(
+                  controller: _titleTextController,
+                  decoration: const InputDecoration(hintText: 'Judul'),
+                );
+              }),
               const SizedBox(height: 16),
-              TextField(
-                controller: _bodyTextController,
-                minLines: 10,
-                maxLines: null,
-                decoration: const InputDecoration(hintText: 'Isi'),
-              ),
+              Obx(() {
+                _bodyTextController.text = controller.body.value;
+                return TextField(
+                  controller: _bodyTextController,
+                  minLines: 10,
+                  maxLines: null,
+                  decoration: const InputDecoration(hintText: 'Isi'),
+                );
+              }),
             ],
           ),
         ),
