@@ -31,7 +31,7 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future<List<Note>> get allNoteEntries => select(notes).get();
+  Stream<List<Note>> get allNoteEntries => select(notes).watch();
 
   Future addNote(NotesCompanion entry) {
     return into(notes).insert(entry);

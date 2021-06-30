@@ -9,7 +9,7 @@ class NoteController {
     db.addNote(NotesCompanion(title: Value(title), body: Value(body)));
   }
 
-  Future<List<Note>> getAllNote() async {
-    return await db.allNoteEntries;
+  Stream<List<Note>> getAllNote() {
+    return db.allNoteEntries;
   }
 }

@@ -38,14 +38,14 @@ class NotePage extends StatelessWidget {
               ),
               TextField(
                 controller: _titleTextController,
-                decoration: InputDecoration(hintText: 'Judul'),
+                decoration: const InputDecoration(hintText: 'Judul'),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _bodyTextController,
                 minLines: 10,
                 maxLines: null,
-                decoration: InputDecoration(hintText: 'Isi'),
+                decoration: const InputDecoration(hintText: 'Isi'),
               ),
             ],
           ),

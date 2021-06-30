@@ -16,8 +16,8 @@ class HomePage extends StatelessWidget {
         title: const Text('Notes'),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: noteController.getAllNote(),
+        child: StreamBuilder(
+          stream: noteController.getAllNote(),
           builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
             if (snapshot.hasData) {
               final data = snapshot.data;
