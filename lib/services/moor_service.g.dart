@@ -197,8 +197,11 @@ class $NoteTable extends Note with TableInfo<$NoteTable, NoteData> {
   @override
   late final GeneratedTextColumn title = _constructTitle();
   GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn('title', $tableName, false,
-        minTextLength: 6, maxTextLength: 32);
+    return GeneratedTextColumn(
+      'title',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _bodyMeta = const VerificationMeta('body');

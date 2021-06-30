@@ -30,4 +30,8 @@ class MyDatabase extends _$MyDatabase {
   // are covered later in this readme.
   @override
   int get schemaVersion => 1;
+
+  Future addNote(NoteCompanion entry) {
+    return into(note).insert(entry);
+  }
 }
