@@ -21,4 +21,8 @@ class NoteController {
   Future<Note> getNoteById(int id) {
     return db.getNoteEntry(id);
   }
+
+  Future<void> deleteNote(int id) async {
+    await db.deleteNote(id);
+  }
 }

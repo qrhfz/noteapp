@@ -27,7 +27,17 @@ class NotePage extends StatelessWidget {
                 title: _titleTextController.text,
                 body: _bodyTextController.text),
             icon: const Icon(Icons.save),
-          )
+          ),
+          if (_id != null)
+            IconButton(
+              onPressed: () {
+                noteController.deleteNote(_id!);
+                Get.back();
+              },
+              icon: const Icon(Icons.delete),
+            )
+          else
+            Container()
         ],
       ),
       body: Padding(

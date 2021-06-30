@@ -48,4 +48,8 @@ class MyDatabase extends _$MyDatabase {
   Future<void> createOrUpdateNote(Note note) {
     return into(notes).insertOnConflictUpdate(note);
   }
+
+  Future<void> deleteNote(int id) {
+    return (delete(notes)..where((t) => t.id.equals(id))).go();
+  }
 }
