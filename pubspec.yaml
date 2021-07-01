@@ -21,9 +21,10 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.2
+  flutter_slidable: ^0.6.0
   get: ^4.1.4
   lint: ^1.5.3
   moor: ^4.3.2
