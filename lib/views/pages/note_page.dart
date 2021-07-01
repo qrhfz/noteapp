@@ -22,7 +22,6 @@ class NotePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () => controller.saveNote(
-                id: _id,
                 title: _titleTextController.text,
                 body: _bodyTextController.text),
             icon: const Icon(Icons.save),

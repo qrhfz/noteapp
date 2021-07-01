@@ -19,12 +19,14 @@ class NotePageController extends GetxController {
     }
   }
 
-  void saveNote({int? id, required String title, required String body}) {
-    if (id != null) {
-      db.updateNote(NotesCompanion(
-          title: m.Value(title), body: m.Value(body), id: m.Value(id)));
+  Future<void> saveNote({required String title, required String body}) async {
+    if (id.value != 0) {
+      return db.updateNote(NotesCompanion(
+          title: m.Value(title), body: m.Value(body), id: m.Value(id.value)));
     } else {
-      db.addNote(NotesCompanion(title: m.Value(title), body: m.Value(body)));
+      var id = await db
+          .addNote(NotesCompanion(title: m.Value(title), body: m.Value(body)));
+      this.id.value = id as int;
     }
   }
 }
