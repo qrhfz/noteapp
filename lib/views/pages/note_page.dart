@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noteapp/controllers/note_controller.dart';
 import 'package:noteapp/controllers/note_page_controller.dart';
 
 class NotePage extends StatelessWidget {
   NotePage({Key? key}) : super(key: key);
   final _titleTextController = TextEditingController();
   final _bodyTextController = TextEditingController();
-  final NoteController noteController = Get.find();
+
   final controller = Get.put(NotePageController());
   final int? _id = Get.arguments as int?;
   @override
@@ -22,22 +21,12 @@ class NotePage extends StatelessWidget {
         title: const Text('View Note'),
         actions: [
           IconButton(
-            onPressed: () => noteController.saveNote(
+            onPressed: () => controller.saveNote(
                 id: _id,
                 title: _titleTextController.text,
                 body: _bodyTextController.text),
             icon: const Icon(Icons.save),
           ),
-          if (_id != null)
-            IconButton(
-              onPressed: () {
-                noteController.deleteNote(_id!);
-                Get.back();
-              },
-              icon: const Icon(Icons.delete),
-            )
-          else
-            Container()
         ],
       ),
       body: Padding(
