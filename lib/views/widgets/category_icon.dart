@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noteapp/consts/app_category_icon.dart';
+import 'package:noteapp/consts/category_styles.dart';
 
 class CategoryIcon extends StatelessWidget {
   const CategoryIcon({

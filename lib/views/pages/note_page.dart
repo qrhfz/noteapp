@@ -47,23 +47,44 @@ class NotePage extends StatelessWidget {
               ),
               Obx(() {
                 _titleTextController.text = controller.title.value;
-                return TextField(
-                  controller: _titleTextController,
-                  decoration: const InputDecoration(hintText: 'Judul'),
-                );
+                return _buildTextFieldTitle();
               }),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Obx(() {
                 _bodyTextController.text = controller.body.value;
-                return TextField(
-                  controller: _bodyTextController,
-                  minLines: 10,
-                  maxLines: null,
-                  decoration: const InputDecoration(hintText: 'Isi'),
-                );
+                return _buildTextFieldBody();
               }),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  TextField _buildTextFieldTitle() {
+    return TextField(
+      controller: _titleTextController,
+      decoration: InputDecoration(
+        hintText: 'Judul',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(),
+        ),
+      ),
+    );
+  }
+
+  TextField _buildTextFieldBody() {
+    return TextField(
+      controller: _bodyTextController,
+      minLines: 10,
+      maxLines: null,
+      decoration: InputDecoration(
+        hintText: 'Isi',
+        alignLabelWithHint: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(),
         ),
       ),
     );

@@ -9,14 +9,16 @@ const noteCategoryIcons = [
   Icons.dangerous
 ];
 
-const List<Color> noteCategoryColors = [
+final List<Color> noteCategoryColors = [
+  Colors.white,
+  Colors.grey,
   Colors.red,
   Colors.blue,
-  Colors.orange,
+  Colors.deepOrange,
   Colors.green,
   Colors.indigo,
   Colors.teal,
-  Colors.cyan,
+  Colors.cyan.shade600,
   Colors.purple,
   Colors.pink
 ];

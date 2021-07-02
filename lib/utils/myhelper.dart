@@ -1,9 +1,11 @@
 class MyHelper {
   static String truncate(String source, int targetLength) {
-    if (source.length > targetLength) {
-      return '${source.substring(0, targetLength - 3)}...';
+    final trimmed = source.trim();
+    final singleLine = trimmed.replaceAll('\n', ' ');
+    if (singleLine.length > targetLength) {
+      return '${singleLine.substring(0, targetLength - 3)}...';
     }
 
-    return source;
+    return singleLine;
   }
 }
