@@ -24,7 +24,7 @@ class NotePageController extends GetxController {
       return db.updateNote(NotesCompanion(
           title: m.Value(title), body: m.Value(body), id: m.Value(id.value)));
     } else {
-      var id = await db
+      final id = await db
           .addNote(NotesCompanion(title: m.Value(title), body: m.Value(body)));
       this.id.value = id as int;
     }

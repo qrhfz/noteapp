@@ -5,4 +5,5 @@ class Notes extends Table {
   TextColumn get title => text()();
   TextColumn get body => text()();
   IntColumn get category => integer().nullable()();
+  BoolColumn get pinned => boolean().withDefault(const Constant(false))();
 }

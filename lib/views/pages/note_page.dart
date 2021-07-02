@@ -36,7 +36,6 @@ class NotePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // CategoryIcon(iconIndex: 0, colorIndex: 0),
                   TextButton(
                     onPressed: () {},
                     child: const Text('No Category'),
@@ -68,7 +67,7 @@ class NotePage extends StatelessWidget {
         hintText: 'Judul',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(),
+          // borderSide: BorderSide(),
         ),
       ),
     );
@@ -84,7 +83,7 @@ class NotePage extends StatelessWidget {
         alignLabelWithHint: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(),
+          // borderSide: const BorderSide(),
         ),
       ),
     );

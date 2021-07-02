@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:noteapp/consts/category_styles.dart';
 import 'package:noteapp/controllers/home_page_controller.dart';
 import 'package:noteapp/utils/myhelper.dart';
-import 'package:noteapp/views/widgets/category_icon.dart';
 
 class NoteListTile extends StatelessWidget {
   NoteListTile(
@@ -41,7 +40,7 @@ class NoteListTile extends StatelessWidget {
             ),
             title: Text(title.isNotEmpty ? title : 'Tanpa Judul'),
             subtitle: Text(MyHelper.truncate(body, 45)),
-            trailing: pinned ? Icon(Icons.push_pin) : null,
+            trailing: pinned ? const Icon(Icons.push_pin) : null,
           ),
         ));
   }

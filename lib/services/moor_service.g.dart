@@ -12,11 +12,13 @@ class Note extends DataClass implements Insertable<Note> {
   final String title;
   final String body;
   final int? category;
+  final bool pinned;
   Note(
       {required this.id,
       required this.title,
       required this.body,
-      this.category});
+      this.category,
+      required this.pinned});
   factory Note.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -29,6 +31,8 @@ class Note extends DataClass implements Insertable<Note> {
           .mapFromDatabaseResponse(data['${effectivePrefix}body'])!,
       category: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      pinned: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}pinned'])!,
     );
   }
   @override
@@ -40,6 +44,7 @@ class Note extends DataClass implements Insertable<Note> {
     if (!nullToAbsent || category != null) {
       map['category'] = Variable<int?>(category);
     }
+    map['pinned'] = Variable<bool>(pinned);
     return map;
   }
 
@@ -51,6 +56,7 @@ class Note extends DataClass implements Insertable<Note> {
       category: category == null && nullToAbsent
           ? const Value.absent()
           : Value(category),
+      pinned: Value(pinned),
     );
   }
 
@@ -62,6 +68,7 @@ class Note extends DataClass implements Insertable<Note> {
       title: serializer.fromJson<String>(json['title']),
       body: serializer.fromJson<String>(json['body']),
       category: serializer.fromJson<int?>(json['category']),
+      pinned: serializer.fromJson<bool>(json['pinned']),
     );
   }
   @override
@@ -72,14 +79,22 @@ class Note extends DataClass implements Insertable<Note> {
       'title': serializer.toJson<String>(title),
       'body': serializer.toJson<String>(body),
       'category': serializer.toJson<int?>(category),
+      'pinned': serializer.toJson<bool>(pinned),
     };
   }
 
-  Note copyWith({int? id, String? title, String? body, int? category}) => Note(
+  Note copyWith(
+          {int? id,
+          String? title,
+          String? body,
+          int? category,
+          bool? pinned}) =>
+      Note(
         id: id ?? this.id,
         title: title ?? this.title,
         body: body ?? this.body,
         category: category ?? this.category,
+        pinned: pinned ?? this.pinned,
       );
   @override
   String toString() {
@@ -87,14 +102,17 @@ class Note extends DataClass implements Insertable<Note> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
-          ..write('category: $category')
+          ..write('category: $category, ')
+          ..write('pinned: $pinned')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(title.hashCode, $mrjc(body.hashCode, category.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(title.hashCode,
+          $mrjc(body.hashCode, $mrjc(category.hashCode, pinned.hashCode)))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -102,7 +120,8 @@ class Note extends DataClass implements Insertable<Note> {
           other.id == this.id &&
           other.title == this.title &&
           other.body == this.body &&
-          other.category == this.category);
+          other.category == this.category &&
+          other.pinned == this.pinned);
 }
 
 class NotesCompanion extends UpdateCompanion<Note> {
@@ -110,17 +129,20 @@ class NotesCompanion extends UpdateCompanion<Note> {
   final Value<String> title;
   final Value<String> body;
   final Value<int?> category;
+  final Value<bool> pinned;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.body = const Value.absent(),
     this.category = const Value.absent(),
+    this.pinned = const Value.absent(),
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
     required String title,
     required String body,
     this.category = const Value.absent(),
+    this.pinned = const Value.absent(),
   })  : title = Value(title),
         body = Value(body);
   static Insertable<Note> custom({
@@ -128,12 +150,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
     Expression<String>? title,
     Expression<String>? body,
     Expression<int?>? category,
+    Expression<bool>? pinned,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (body != null) 'body': body,
       if (category != null) 'category': category,
+      if (pinned != null) 'pinned': pinned,
     });
   }
 
@@ -141,12 +165,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
       {Value<int>? id,
       Value<String>? title,
       Value<String>? body,
-      Value<int?>? category}) {
+      Value<int?>? category,
+      Value<bool>? pinned}) {
     return NotesCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
       category: category ?? this.category,
+      pinned: pinned ?? this.pinned,
     );
   }
 
@@ -165,6 +191,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (category.present) {
       map['category'] = Variable<int?>(category.value);
     }
+    if (pinned.present) {
+      map['pinned'] = Variable<bool>(pinned.value);
+    }
     return map;
   }
 
@@ -174,7 +203,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
-          ..write('category: $category')
+          ..write('category: $category, ')
+          ..write('pinned: $pinned')
           ..write(')'))
         .toString();
   }
@@ -225,8 +255,16 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     );
   }
 
+  final VerificationMeta _pinnedMeta = const VerificationMeta('pinned');
   @override
-  List<GeneratedColumn> get $columns => [id, title, body, category];
+  late final GeneratedBoolColumn pinned = _constructPinned();
+  GeneratedBoolColumn _constructPinned() {
+    return GeneratedBoolColumn('pinned', $tableName, false,
+        defaultValue: const Constant(false));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, title, body, category, pinned];
   @override
   $NotesTable get asDslTable => this;
   @override
@@ -256,6 +294,10 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     if (data.containsKey('category')) {
       context.handle(_categoryMeta,
           category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('pinned')) {
+      context.handle(_pinnedMeta,
+          pinned.isAcceptableOrUnknown(data['pinned']!, _pinnedMeta));
     }
     return context;
   }
