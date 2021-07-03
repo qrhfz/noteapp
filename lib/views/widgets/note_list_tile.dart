@@ -33,9 +33,10 @@ class NoteListTile extends StatelessWidget {
         ],
         child: Card(
           child: ListTile(
-            tileColor: noteCategoryColors.first,
+            tileColor: noteCategoryColors[0],
             leading: Icon(
               noteCategoryIcons[0],
+              color: noteCategoryColors.last,
               size: 32,
             ),
             title: Text(title.isNotEmpty ? title : 'Tanpa Judul'),
