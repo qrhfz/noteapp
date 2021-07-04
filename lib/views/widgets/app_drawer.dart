@@ -27,16 +27,16 @@ class AppDrawer extends StatelessWidget {
             return _drawerHeader(ctx);
           } else if (index == 1) {
             return ListTile(
-              title: Text('Atur Kategori'),
-              leading: Icon(
+              title: const Text('Atur Kategori'),
+              leading: const Icon(
                 Icons.settings,
               ),
               onTap: () => Get.to(() => const CategoryPage()),
             );
           } else if (index == 2) {
-            return Divider();
+            return const Divider();
           }
-          return ListTile(
+          return const ListTile(
             leading: Icon(Icons.favorite),
             title: Text('Kategori'),
           );

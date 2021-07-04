@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noteapp/controllers/note_page_controller.dart';
+import 'package:noteapp/controllers/pages/note_page_controller.dart';
 
 class NotePage extends StatelessWidget {
   NotePage({Key? key}) : super(key: key);

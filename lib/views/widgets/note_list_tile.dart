@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/consts/category_styles.dart';
-import 'package:noteapp/controllers/home_page_controller.dart';
+import 'package:noteapp/controllers/pages/home_page_controller.dart';
 import 'package:noteapp/services/moor_service.dart';
 import 'package:noteapp/utils/myhelper.dart';
 import 'package:noteapp/views/pages/note_page.dart';
