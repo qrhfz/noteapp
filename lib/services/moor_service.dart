@@ -1,4 +1,5 @@
 // These imports are only needed to open the database
+import 'dart:developer';
 import 'dart:io';
 import 'package:moor/ffi.dart';
 import 'package:noteapp/models/category_model.dart';
@@ -51,5 +52,15 @@ class MyDatabase extends _$MyDatabase {
 
   Future<void> deleteNote(int id) {
     return (delete(notes)..where((t) => t.id.equals(id))).go();
+  }
+
+  Future<List<Note>> searchNote(String searchTerm) {
+    return (select(notes)
+          ..where((tbl) {
+            log('SEARCH');
+            return tbl.body.contains(searchTerm) |
+                tbl.title.contains(searchTerm);
+          }))
+        .get();
   }
 }

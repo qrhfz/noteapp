@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/controllers/home_page_controller.dart';
 import 'package:noteapp/services/moor_service.dart';
+import 'package:noteapp/utils/note_search_delegate.dart';
 import 'package:noteapp/views/pages/note_page.dart';
 import 'package:noteapp/views/widgets/app_drawer.dart';
 import 'package:noteapp/views/widgets/note_list_tile.dart';
@@ -15,7 +16,13 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: NoteSearchDelegate());
+              },
+              icon: const Icon(Icons.search))
+        ],
       ),
       body: _buildNoteList(),
       drawer: AppDrawer(),
@@ -56,21 +63,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  ListView _buildNoteListSuccess(List<Note> data) {
+  ListView _buildNoteListSuccess(List<Note> notes) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        final title = data[index].title;
-        final body = data[index].body;
-        final id = data[index].id;
-        return GestureDetector(
-            onTap: () => Get.to(() => NotePage(), arguments: id),
-            child: NoteListTile(
-              title: title,
-              body: body,
-              id: id,
-            ));
+        return NoteListTile(note: notes[index]);
       },
-      itemCount: data.length,
+      itemCount: notes.length,
     );
   }
 }
