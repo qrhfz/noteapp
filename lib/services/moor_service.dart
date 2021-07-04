@@ -32,7 +32,11 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  Stream<List<Note>> get allNoteEntries => select(notes).watch();
+  Stream<List<Note>> get allNoteEntries => (select(notes)
+        ..orderBy([
+          (n) => OrderingTerm(expression: n.pinned, mode: OrderingMode.desc)
+        ]))
+      .watch();
 
   Future<Note> getNoteEntry(int id) {
     return (select(notes)..where((tbl) => tbl.id.equals(id))).getSingle();
@@ -63,4 +67,12 @@ class MyDatabase extends _$MyDatabase {
           }))
         .get();
   }
+
+  // Future toggleNotePin(int id) {
+  //   return (update(notes)..where((tbl) => tbl.id.equals(id))).write(
+  //     NotesCompanion(
+  //       pinned: Value(!pinned),
+  //     ),
+  //   );
+  // }
 }

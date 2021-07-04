@@ -25,24 +25,10 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: _buildNoteList(),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => NotePage()),
         child: const Icon(Icons.create),
-      ),
-    );
-  }
-
-  Widget _buildCategoryView() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: GridView.builder(
-        itemCount: 7,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 150, crossAxisSpacing: 8, mainAxisSpacing: 8),
-        itemBuilder: (ctx, index) {
-          return CategoryCard();
-        },
       ),
     );
   }
@@ -84,7 +70,7 @@ class CategoryCard extends StatelessWidget {
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+        children: const [
           Icon(
             Icons.star,
             size: 36,

@@ -14,7 +14,7 @@ class NoteSearchDelegate extends SearchDelegate<String> {
           // close(context, result);
           query = "";
         },
-        icon: Icon(Icons.close),
+        icon: const Icon(Icons.close),
       )
     ];
   }
@@ -26,7 +26,7 @@ class NoteSearchDelegate extends SearchDelegate<String> {
         // close(context, result);
         Get.back();
       },
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
     );
   }
 
@@ -37,10 +37,10 @@ class NoteSearchDelegate extends SearchDelegate<String> {
       builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
         if (snapshot.hasData) {
           final notes = snapshot.data!;
-          if (notes.length > 0) {
+          if (notes.isNotEmpty) {
             return _buildResultList(notes);
           } else {
-            return Center(child: const Text('Tidak ditemukan'));
+            return const Center(child: Text('Tidak ditemukan'));
           }
         } else {
           return const Text('Error');

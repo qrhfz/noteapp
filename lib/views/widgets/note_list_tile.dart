@@ -15,30 +15,38 @@ class NoteListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-        actionPane: const SlidableDrawerActionPane(),
-        // actionExtentRatio: 0.25,
-        actions: [
-          IconSlideAction(
-              caption: 'Delete',
-              color: Colors.red,
-              icon: Icons.delete,
-              onTap: () => _homePageController.deleteNote(note.id))
-        ],
-        child: Card(
-          child: ListTile(
-              tileColor: noteCategoryColors[0],
-              leading: Icon(
-                noteCategoryIcons[0],
-                color: noteCategoryColors.last,
-                size: 32,
-              ),
-              title: Text(note.title.isNotEmpty ? note.title : 'Tanpa Judul'),
-              subtitle: Text(MyHelper.truncate(note.body, 45)),
-              trailing: note.pinned ? const Icon(Icons.push_pin) : null,
-              onTap: () => Get.to(
-                    () => NotePage(),
-                    arguments: note.id,
-                  )),
-        ));
+      actionPane: const SlidableDrawerActionPane(),
+      // actionExtentRatio: 0.25,
+      actions: [
+        IconSlideAction(
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () => _homePageController.deleteNote(note.id)),
+      ],
+
+      secondaryActions: [
+        IconSlideAction(
+            caption: 'Pin',
+            color: Colors.yellow,
+            icon: Icons.push_pin_outlined,
+            onTap: () => _homePageController.togglePin(note))
+      ],
+
+      child: Card(
+        child: ListTile(
+          tileColor: noteCategoryColors[0],
+          leading: Icon(
+            noteCategoryIcons[0],
+            color: noteCategoryColors.last,
+            size: 32,
+          ),
+          title: Text(note.title.isNotEmpty ? note.title : 'Tanpa Judul'),
+          subtitle: Text(MyHelper.truncate(note.body, 45)),
+          trailing: note.pinned ? const Icon(Icons.push_pin) : null,
+          onTap: () => Get.to(() => NotePage(), arguments: note.id),
+        ),
+      ),
+    );
   }
 }
