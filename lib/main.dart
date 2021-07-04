@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Note App',
       theme: ThemeData(
-        primaryColor: Colors.black,
-        // accentColor: Colors.orange,
+        primarySwatch: Colors.blueGrey,
       ),
       home: HomePage(),
     );
