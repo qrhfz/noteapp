@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noteapp/consts/category_styles.dart';
+import 'package:noteapp/controllers/categories_controller.dart';
+import 'package:noteapp/controllers/dialogs/add_category_dialog_controller.dart';
 
 class AddCategoryDialog extends StatelessWidget {
+  final c = Get.put(AddCategoryDialogController());
+  final CategoriesController _categoriesController =
+      Get.put(CategoriesController());
   AddCategoryDialog({
     Key? key,
   }) : super(key: key);
@@ -9,51 +15,73 @@ class AddCategoryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Tambah Kategori',
-                  style: Theme.of(context).textTheme.headline5),
-              TextField(
-                controller: _namaKategori,
-                decoration: const InputDecoration(hintText: 'Nama Kategory'),
-              ),
-              Row(
-                children: [
-                  DropdownButton(
-                    hint: const Text('Icon'),
-                    items: noteCategoryIcons
-                        .map((icon) => DropdownMenuItem(
-                            child: Icon(icon), value: icon.toString()))
+      child: SingleChildScrollView(
+        child: Container(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Tambah Kategori',
+                    style: Theme.of(context).textTheme.headline5),
+                TextField(
+                  controller: _namaKategori,
+                  decoration: const InputDecoration(hintText: 'Nama Kategory'),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Icon',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Obx(
+                  () => Wrap(
+                    children: CategoryIconStyle.noteCategoryIcons.entries
+                        .map(
+                          (e) => ChoiceChip(
+                            avatar: Icon(e.value),
+                            label: Text(e.key),
+                            selected: c.selectedIcon.value == e.key,
+                            onSelected: (selected) {
+                              c.selectedIcon.value = e.key;
+                            },
+                          ),
+                        )
                         .toList(),
-                    onChanged: (_) {},
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  DropdownButton(
-                    hint: const Text('Color'),
-                    items: noteCategoryColors
-                        .map((color) => DropdownMenuItem(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: color,
-                                shape: BoxShape.circle,
+                ),
+                Text(
+                  'Warna',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Obx(
+                  () => Wrap(
+                    children: CategoryIconStyle.noteCategoryColors.entries
+                        .map((e) => ChoiceChip(
+                              avatar: Container(
+                                color: e.value,
+                                width: 16,
+                                height: 16,
                               ),
-                              width: 16,
-                              height: 26,
-                            ),
-                            value: color.toString()))
+                              label: Text(e.key),
+                              selected: c.selectedColor.value == e.key,
+                              onSelected: (selected) {
+                                c.selectedColor.value = e.key;
+                              },
+                            ))
                         .toList(),
-                    onChanged: (_) {},
                   ),
-                ],
-              )
-            ],
-          )),
+                ),
+                ElevatedButton(
+                    onPressed: () => _categoriesController.addCategory(
+                        _namaKategori.text,
+                        c.selectedIcon.value,
+                        c.selectedColor.value),
+                    child: const Text('Tambah'))
+              ],
+            )),
+      ),
     );
   }
 }

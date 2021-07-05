@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: _buildNoteList(),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => NotePage()),
         child: const Icon(Icons.create),

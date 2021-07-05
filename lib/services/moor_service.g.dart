@@ -319,13 +319,9 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
 class Category extends DataClass implements Insertable<Category> {
   final int id;
   final String name;
-  final int icon;
-  final int color;
-  Category(
-      {required this.id,
-      required this.name,
-      required this.icon,
-      required this.color});
+  final String? icon;
+  final String? color;
+  Category({required this.id, required this.name, this.icon, this.color});
   factory Category.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -334,10 +330,10 @@ class Category extends DataClass implements Insertable<Category> {
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
-      icon: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}icon'])!,
-      color: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}color'])!,
+      icon: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}icon']),
+      color: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}color']),
     );
   }
   @override
@@ -345,8 +341,12 @@ class Category extends DataClass implements Insertable<Category> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    map['icon'] = Variable<int>(icon);
-    map['color'] = Variable<int>(color);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String?>(icon);
+    }
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<String?>(color);
+    }
     return map;
   }
 
@@ -354,8 +354,9 @@ class Category extends DataClass implements Insertable<Category> {
     return CategoriesCompanion(
       id: Value(id),
       name: Value(name),
-      icon: Value(icon),
-      color: Value(color),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      color:
+          color == null && nullToAbsent ? const Value.absent() : Value(color),
     );
   }
 
@@ -365,8 +366,8 @@ class Category extends DataClass implements Insertable<Category> {
     return Category(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      icon: serializer.fromJson<int>(json['icon']),
-      color: serializer.fromJson<int>(json['color']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      color: serializer.fromJson<String?>(json['color']),
     );
   }
   @override
@@ -375,12 +376,13 @@ class Category extends DataClass implements Insertable<Category> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'icon': serializer.toJson<int>(icon),
-      'color': serializer.toJson<int>(color),
+      'icon': serializer.toJson<String?>(icon),
+      'color': serializer.toJson<String?>(color),
     };
   }
 
-  Category copyWith({int? id, String? name, int? icon, int? color}) => Category(
+  Category copyWith({int? id, String? name, String? icon, String? color}) =>
+      Category(
         id: id ?? this.id,
         name: name ?? this.name,
         icon: icon ?? this.icon,
@@ -413,8 +415,8 @@ class Category extends DataClass implements Insertable<Category> {
 class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<int> id;
   final Value<String> name;
-  final Value<int> icon;
-  final Value<int> color;
+  final Value<String?> icon;
+  final Value<String?> color;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -424,16 +426,14 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    required int icon,
-    required int color,
-  })  : name = Value(name),
-        icon = Value(icon),
-        color = Value(color);
+    this.icon = const Value.absent(),
+    this.color = const Value.absent(),
+  }) : name = Value(name);
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<int>? icon,
-    Expression<int>? color,
+    Expression<String?>? icon,
+    Expression<String?>? color,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -446,8 +446,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   CategoriesCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
-      Value<int>? icon,
-      Value<int>? color}) {
+      Value<String?>? icon,
+      Value<String?>? color}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -466,10 +466,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
       map['name'] = Variable<String>(name.value);
     }
     if (icon.present) {
-      map['icon'] = Variable<int>(icon.value);
+      map['icon'] = Variable<String?>(icon.value);
     }
     if (color.present) {
-      map['color'] = Variable<int>(color.value);
+      map['color'] = Variable<String?>(color.value);
     }
     return map;
   }
@@ -512,23 +512,23 @@ class $CategoriesTable extends Categories
 
   final VerificationMeta _iconMeta = const VerificationMeta('icon');
   @override
-  late final GeneratedIntColumn icon = _constructIcon();
-  GeneratedIntColumn _constructIcon() {
-    return GeneratedIntColumn(
+  late final GeneratedTextColumn icon = _constructIcon();
+  GeneratedTextColumn _constructIcon() {
+    return GeneratedTextColumn(
       'icon',
       $tableName,
-      false,
+      true,
     );
   }
 
   final VerificationMeta _colorMeta = const VerificationMeta('color');
   @override
-  late final GeneratedIntColumn color = _constructColor();
-  GeneratedIntColumn _constructColor() {
-    return GeneratedIntColumn(
+  late final GeneratedTextColumn color = _constructColor();
+  GeneratedTextColumn _constructColor() {
+    return GeneratedTextColumn(
       'color',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -557,14 +557,10 @@ class $CategoriesTable extends Categories
     if (data.containsKey('icon')) {
       context.handle(
           _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
-    } else if (isInserting) {
-      context.missing(_iconMeta);
     }
     if (data.containsKey('color')) {
       context.handle(
           _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
-    } else if (isInserting) {
-      context.missing(_colorMeta);
     }
     return context;
   }

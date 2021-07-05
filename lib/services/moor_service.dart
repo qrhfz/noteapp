@@ -32,6 +32,7 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
+  // BUAT NOTE MULAI
   Stream<List<Note>> get allNoteEntries => (select(notes)
         ..orderBy([
           (n) => OrderingTerm(expression: n.pinned, mode: OrderingMode.desc)
@@ -68,11 +69,11 @@ class MyDatabase extends _$MyDatabase {
         .get();
   }
 
-  // Future toggleNotePin(int id) {
-  //   return (update(notes)..where((tbl) => tbl.id.equals(id))).write(
-  //     NotesCompanion(
-  //       pinned: Value(!pinned),
-  //     ),
-  //   );
-  // }
+  // BUAT NOTE SELESAI
+
+  Future addCategory(CategoriesCompanion entry) {
+    return into(categories).insert(entry);
+  }
+
+  Stream<List<Category>> get allCategoryEntries => select(categories).watch();
 }
