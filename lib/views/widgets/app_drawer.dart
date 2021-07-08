@@ -25,7 +25,7 @@ class AppDrawer extends StatelessWidget {
   Widget _buildCategoryList() {
     return Expanded(
       child: StreamBuilder<List<Category>>(
-          stream: _categoriesController.getAllCategory(),
+          stream: _categoriesController.watchCategories(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final categories = snapshot.data;

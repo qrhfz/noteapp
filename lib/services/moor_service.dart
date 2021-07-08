@@ -43,12 +43,12 @@ class MyDatabase extends _$MyDatabase {
     return (select(notes)..where((tbl) => tbl.id.equals(id))).getSingle();
   }
 
-  Future addNote(NotesCompanion entry) {
-    return into(notes).insert(entry);
+  Future<int> addNote(NotesCompanion note) {
+    return into(notes).insert(note);
   }
 
-  Future updateNote(NotesCompanion entry) {
-    return update(notes).replace(entry);
+  Future updateNote(Note note) {
+    return update(notes).replace(note);
   }
 
   Future<void> createOrUpdateNote(Note note) {
@@ -75,5 +75,6 @@ class MyDatabase extends _$MyDatabase {
     return into(categories).insert(entry);
   }
 
-  Stream<List<Category>> get allCategoryEntries => select(categories).watch();
+  Stream<List<Category>> get watchCategoryEntries => select(categories).watch();
+  Future<List<Category>> get allCategoryEntries => select(categories).get();
 }

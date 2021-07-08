@@ -74,10 +74,11 @@ class AddCategoryDialog extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                    onPressed: () => _categoriesController.addCategory(
-                        _namaKategori.text,
-                        c.selectedIcon.value,
-                        c.selectedColor.value),
+                    onPressed: () {
+                      _categoriesController.addCategory(_namaKategori.text,
+                          c.selectedIcon.value, c.selectedColor.value);
+                      Get.back();
+                    },
                     child: const Text('Tambah'))
               ],
             )),

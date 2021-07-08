@@ -1,32 +1,52 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:noteapp/services/moor_service.dart';
 import 'package:moor/moor.dart' as m;
 
 class NotePageController extends GetxController {
   MyDatabase db = Get.find();
+  Rx<Note> note = Note(id: 0, title: '', body: '', pinned: false).obs;
 
-  RxInt id = 0.obs;
-  RxString title = ''.obs;
-  RxString body = ''.obs;
+  RxInt selectedCategoryId = 0.obs;
 
   Future<void> getNoteContent() async {
     try {
-      final Note note = await db.getNoteEntry(id.value);
-      title.value = note.title;
-      body.value = note.body;
+      note.value = await db.getNoteEntry(note.value.id);
+      update();
     } on Exception catch (_) {
       // TODO
     }
   }
 
-  Future<void> saveNote({required String title, required String body}) async {
-    if (id.value != 0) {
-      return db.updateNote(NotesCompanion(
-          title: m.Value(title), body: m.Value(body), id: m.Value(id.value)));
+  Future<void> saveNote() async {
+    log('ID: ${note.value.id}');
+    if (note.value.id != 0) {
+      log('SAVE NOTE: UPDATE');
+      return db.updateNote(note.value);
     } else {
-      final id = await db
-          .addNote(NotesCompanion(title: m.Value(title), body: m.Value(body)));
-      this.id.value = id as int;
+      log('SAVE NOTE: SAVE ');
+
+      final int id = await db.addNote(NotesCompanion(
+          body: m.Value(note.value.body), title: m.Value(note.value.title)));
+      setId(id);
     }
+  }
+
+  void setId(int id) {
+    log('ID: $id');
+    note.value = note.value.copyWith(id: id);
+  }
+
+  void setTitle(String text) {
+    log('SET TITLE');
+    note.value = note.value.copyWith(title: text);
+    saveNote();
+  }
+
+  void setBody(String text) {
+    log('SET Body');
+    note.value = note.value.copyWith(body: text);
+    saveNote();
   }
 }

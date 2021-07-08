@@ -13,7 +13,6 @@ class HomePageController {
   }
 
   Future<void> togglePin(Note entry) async {
-    return db
-        .updateNote(entry.copyWith(pinned: !entry.pinned).toCompanion(true));
+    return db.updateNote(entry.copyWith(pinned: !entry.pinned));
   }
 }

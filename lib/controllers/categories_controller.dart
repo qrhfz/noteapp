@@ -10,5 +10,6 @@ class CategoriesController {
         name: Value(name), icon: Value(icon), color: Value(color)));
   }
 
-  Stream<List<Category>> getAllCategory() => db.allCategoryEntries;
+  Stream<List<Category>> watchCategories() => db.watchCategoryEntries;
+  Future<List<Category>> getCategories() => db.allCategoryEntries;
 }
