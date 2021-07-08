@@ -71,7 +71,9 @@ class MyDatabase extends _$MyDatabase {
 
   // BUAT NOTE SELESAI
 
-  Future addCategory(CategoriesCompanion entry) {
+  Future<int> addCategory(CategoriesCompanion entry) {
+    log('TAMBAH KATEGORI');
+    log('ENTRY NAME : ${entry.name.value}');
     return into(categories).insert(entry);
   }
 

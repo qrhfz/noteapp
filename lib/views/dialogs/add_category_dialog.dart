@@ -77,7 +77,7 @@ class AddCategoryDialog extends StatelessWidget {
                     onPressed: () {
                       _categoriesController.addCategory(_namaKategori.text,
                           c.selectedIcon.value, c.selectedColor.value);
-                      Get.back();
+                      // Get.back();
                     },
                     child: const Text('Tambah'))
               ],

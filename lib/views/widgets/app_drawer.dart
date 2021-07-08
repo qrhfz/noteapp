@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
             if (snapshot.hasData) {
               final categories = snapshot.data;
               return ListView.builder(
-                itemCount: categories!.length + 2,
+                itemCount: categories!.length + 3,
                 itemBuilder: (ctx, index) {
                   if (index == 0) {
                     return _drawerHeader(ctx);
@@ -39,35 +39,29 @@ class AppDrawer extends StatelessWidget {
                   } else if (index == 2) {
                     return const Divider();
                   }
-                  return ListTile(
-                    leading: Icon(
-                      CategoryIconStyle
-                          .noteCategoryIcons[categories[index - 2].icon],
-                      color: CategoryIconStyle
-                          .noteCategoryColors[categories[index - 2].color],
-                    ),
-                    title: Text(categories[index - 2].name),
-                  );
+                  return _categoryTile(categories, index);
                 },
-              );
-            } else if (snapshot.hasError) {
-              return Column(
-                children: [
-                  _drawerHeader(context),
-                  _addCategoryTile(),
-                  const ListTile(title: Text('error'))
-                ],
               );
             } else {
               return Column(
                 children: [
                   _drawerHeader(context),
                   _addCategoryTile(),
-                  const ListTile(title: Text('Tidak ada kategori'))
                 ],
               );
             }
           }),
+    );
+  }
+
+  ListTile _categoryTile(List<Category> categories, int index) {
+    return ListTile(
+      leading: Icon(
+        CategoryIconStyle.noteCategoryIcons[categories[index - 3].icon],
+        color:
+            CategoryIconStyle.noteCategoryColors[categories[index - 3].color],
+      ),
+      title: Text(categories[index - 3].name),
     );
   }
 

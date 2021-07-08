@@ -2,10 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noteapp/consts/category_styles.dart';
-import 'package:noteapp/controllers/categories_controller.dart';
 import 'package:noteapp/controllers/pages/note_page_controller.dart';
-import 'package:noteapp/services/moor_service.dart';
 
 class NotePage extends StatelessWidget {
   NotePage({Key? key}) : super(key: key);
@@ -13,7 +10,7 @@ class NotePage extends StatelessWidget {
   final _bodyTextController = TextEditingController();
 
   final controller = Get.put(NotePageController());
-  final CategoriesController _categoriesController = Get.find();
+
   final int? _id = Get.arguments as int?;
   @override
   Widget build(BuildContext context) {
@@ -36,14 +33,7 @@ class NotePage extends StatelessWidget {
               _bodyTextController.text = controller.note.value.body;
               return Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildCategoryDropdownButton(),
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.attach_file))
-                    ],
-                  ),
+                  _categoryChoice(),
                   _buildTextFieldTitle(),
                   const SizedBox(height: 8),
                   _buildTextFieldBody(),
@@ -56,39 +46,27 @@ class NotePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryDropdownButton() => FutureBuilder<List<Category>>(
-      future: _categoriesController.getCategories(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final data = snapshot.data;
-          return Obx(
-            () => DropdownButton<int>(
-              value: controller.selectedCategoryId.value,
-              hint: const Text('Kategori'),
-              onChanged: (value) =>
-                  controller.selectedCategoryId.value = value!,
-              items: data!
-                  .map(
-                    (e) => DropdownMenuItem<int>(
-                        value: e.id,
-                        child: Row(
-                          children: [
-                            Icon(CategoryIconStyle.noteCategoryIcons[e.icon]),
-                            Text(e.name)
-                          ],
-                        )),
-                  )
-                  .toList()
-                    ..add(
-                      const DropdownMenuItem<int>(
-                          value: 0, child: Text('Tanpa Kategori')),
-                    ),
-            ),
-          );
-        } else {
-          return const Text('Tanpa Kategori');
-        }
-      });
+  Widget _categoryChoice() {
+    return SizedBox(
+      height: 50,
+      child: ListView(
+        // This next line does the trick.
+        scrollDirection: Axis.horizontal,
+        children: controller.categories
+            .map((cat) => ChoiceChip(
+                label: Text(cat.name),
+                selected: controller.note.value.category == cat.id,
+                onSelected: (selected) {
+                  if (!selected) {
+                    controller.setSelectedCategoryId(0);
+                  } else {
+                    controller.setSelectedCategoryId(cat.id);
+                  }
+                }))
+            .toList(),
+      ),
+    );
+  }
 
   TextField _buildTextFieldTitle() {
     return TextField(

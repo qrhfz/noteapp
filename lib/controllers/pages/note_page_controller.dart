@@ -4,11 +4,32 @@ import 'package:get/get.dart';
 import 'package:noteapp/services/moor_service.dart';
 import 'package:moor/moor.dart' as m;
 
+import '../categories_controller.dart';
+
 class NotePageController extends GetxController {
   MyDatabase db = Get.find();
+  final CategoriesController _categoriesController = Get.find();
   Rx<Note> note = Note(id: 0, title: '', body: '', pinned: false).obs;
+  List<Category> categories = [];
 
-  RxInt selectedCategoryId = 0.obs;
+  NotePageController() {
+    getCategories();
+  }
+
+  void setSelectedCategoryId(int id) {
+    note.value = note.value.copyWith(category: id);
+    update();
+    saveNote();
+  }
+
+  Future<void> getCategories() async {
+    try {
+      categories = await _categoriesController.getCategories();
+      update();
+    } on Exception catch (_) {
+      // TODO
+    }
+  }
 
   Future<void> getNoteContent() async {
     try {
@@ -27,8 +48,13 @@ class NotePageController extends GetxController {
     } else {
       log('SAVE NOTE: SAVE ');
 
-      final int id = await db.addNote(NotesCompanion(
-          body: m.Value(note.value.body), title: m.Value(note.value.title)));
+      final int id = await db.addNote(
+        NotesCompanion(
+          body: m.Value(note.value.body),
+          title: m.Value(note.value.title),
+          category: m.Value(note.value.category),
+        ),
+      );
       setId(id);
     }
   }
