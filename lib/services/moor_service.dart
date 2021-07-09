@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:moor/ffi.dart';
 import 'package:noteapp/models/category_model.dart';
 import 'package:noteapp/models/note_model.dart';
+import 'package:noteapp/models/note_with_category.dart';
 import 'package:noteapp/models/photo_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -33,11 +34,17 @@ class MyDatabase extends _$MyDatabase {
   int get schemaVersion => 1;
 
   // BUAT NOTE MULAI
-  Stream<List<Note>> get allNoteEntries => (select(notes)
-        ..orderBy([
-          (n) => OrderingTerm(expression: n.pinned, mode: OrderingMode.desc)
-        ]))
-      .watch();
+  Stream<List<NoteWithCategory>> get allNoteEntries {
+    final query = select(notes).join(
+      [leftOuterJoin(categories, categories.id.equalsExp(notes.category))],
+    );
+    query.orderBy([OrderingTerm.desc(notes.pinned)]);
+
+    return query.watch().map((rows) => rows
+        .map((row) => NoteWithCategory(
+            row.readTable(notes), row.readTableOrNull(categories)))
+        .toList());
+  }
 
   Future<Note> getNoteEntry(int id) {
     return (select(notes)..where((tbl) => tbl.id.equals(id))).getSingle();

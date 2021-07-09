@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/controllers/pages/home_page_controller.dart';
+import 'package:noteapp/models/note_with_category.dart';
 import 'package:noteapp/services/moor_service.dart';
 import 'package:noteapp/utils/note_search_delegate.dart';
 import 'package:noteapp/views/pages/note_page.dart';
@@ -36,7 +37,8 @@ class HomePage extends StatelessWidget {
   Widget _buildNoteList() {
     return StreamBuilder(
       stream: _controller.getAllNote(),
-      builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<List<NoteWithCategory>> snapshot) {
         if (snapshot.hasData) {
           final data = snapshot.data;
           return _buildNoteListSuccess(data!);
@@ -49,10 +51,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  ListView _buildNoteListSuccess(List<Note> notes) {
+  ListView _buildNoteListSuccess(List<NoteWithCategory> notes) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return NoteListTile(note: notes[index]);
+        return NoteListTile(notes[index]);
       },
       itemCount: notes.length,
     );

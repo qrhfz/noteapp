@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
+import 'package:noteapp/models/note_with_category.dart';
 import 'package:noteapp/services/moor_service.dart';
 
 class HomePageController {
   MyDatabase db = Get.find();
 
-  Stream<List<Note>> getAllNote() {
+  Stream<List<NoteWithCategory>> getAllNote() {
     return db.allNoteEntries;
   }
 
