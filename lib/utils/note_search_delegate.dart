@@ -53,7 +53,9 @@ class NoteSearchDelegate extends SearchDelegate<String> {
     return ListView.builder(
         itemCount: notes.length,
         itemBuilder: (context, index) {
-          return NoteListTile(note: notes[index]);
+          return ListTile(
+            title: Text(notes[index].title),
+          );
         });
   }
 
