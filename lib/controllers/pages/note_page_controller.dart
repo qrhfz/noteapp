@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/services/moor_service.dart';
 import 'package:moor/moor.dart' as m;
@@ -11,6 +12,8 @@ class NotePageController extends GetxController {
   final CategoriesController _categoriesController = Get.find();
   Rx<Note> note = Note(id: 0, title: '', body: '', pinned: false).obs;
   List<Category> categories = [];
+  final titleText = TextEditingController();
+  final bodyText = TextEditingController();
 
   NotePageController() {
     getCategories();
@@ -34,6 +37,8 @@ class NotePageController extends GetxController {
   Future<void> getNoteContent() async {
     try {
       note.value = await db.getNoteEntry(note.value.id);
+      titleText.text = note.value.title;
+      bodyText.text = note.value.body;
       update();
     } on Exception catch (_) {
       // TODO

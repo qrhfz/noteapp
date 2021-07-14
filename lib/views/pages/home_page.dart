@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/controllers/pages/home_page_controller.dart';
 import 'package:noteapp/models/note_with_category.dart';
-import 'package:noteapp/services/moor_service.dart';
 import 'package:noteapp/utils/note_search_delegate.dart';
 import 'package:noteapp/views/pages/note_page.dart';
 import 'package:noteapp/views/widgets/app_drawer.dart';
@@ -18,11 +17,12 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Notes'),
         actions: [
+          _buildActions(),
           IconButton(
               onPressed: () {
                 showSearch(context: context, delegate: NoteSearchDelegate());
               },
-              icon: const Icon(Icons.search))
+              icon: const Icon(Icons.search)),
         ],
       ),
       body: _buildNoteList(),
@@ -58,6 +58,21 @@ class HomePage extends StatelessWidget {
       },
       itemCount: notes.length,
     );
+  }
+
+  Widget _buildActions() {
+    return Obx(() {
+      if (_controller.selectedIds.isNotEmpty) {
+        return Row(
+          children: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.delete)),
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.push_pin_rounded))
+          ],
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }
 

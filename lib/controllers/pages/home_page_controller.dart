@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 import 'package:noteapp/models/note_with_category.dart';
 import 'package:noteapp/services/moor_service.dart';
 
-class HomePageController {
+class HomePageController extends GetxController {
   MyDatabase db = Get.find();
+  RxList<int> selectedIds = RxList();
 
   Stream<List<NoteWithCategory>> getAllNote() {
     return db.allNoteEntries;
@@ -15,5 +16,17 @@ class HomePageController {
 
   Future<void> togglePin(Note entry) async {
     return db.updateNote(entry.copyWith(pinned: !entry.pinned));
+  }
+
+  bool isSelected(int id) {
+    return selectedIds.contains(id);
+  }
+
+  void toggleSelected(int id) {
+    if (isSelected(id)) {
+      selectedIds.remove(id);
+    } else {
+      selectedIds.add(id);
+    }
   }
 }

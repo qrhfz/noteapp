@@ -6,8 +6,6 @@ import 'package:noteapp/controllers/pages/note_page_controller.dart';
 
 class NotePage extends StatelessWidget {
   NotePage({Key? key}) : super(key: key);
-  final _titleTextController = TextEditingController();
-  final _bodyTextController = TextEditingController();
 
   final controller = Get.put(NotePageController());
 
@@ -29,8 +27,6 @@ class NotePage extends StatelessWidget {
           child: GetBuilder<NotePageController>(
             init: controller,
             builder: (value) {
-              _titleTextController.text = controller.note.value.title;
-              _bodyTextController.text = controller.note.value.body;
               return Column(
                 children: [
                   _categoryChoice(),
@@ -70,8 +66,8 @@ class NotePage extends StatelessWidget {
 
   TextField _buildTextFieldTitle() {
     return TextField(
-      controller: _titleTextController,
-      onChanged: (_) => controller.setTitle(_titleTextController.text),
+      controller: controller.titleText,
+      onChanged: (_) => controller.setTitle(controller.titleText.text),
       decoration: InputDecoration(
         hintText: 'Judul',
         border: OutlineInputBorder(
@@ -84,8 +80,8 @@ class NotePage extends StatelessWidget {
 
   TextField _buildTextFieldBody() {
     return TextField(
-      controller: _bodyTextController,
-      onChanged: (_) => controller.setBody(_bodyTextController.text),
+      controller: controller.bodyText,
+      onChanged: (_) => controller.setBody(controller.bodyText.text),
       minLines: 10,
       maxLines: null,
       decoration: InputDecoration(
