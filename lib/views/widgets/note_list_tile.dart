@@ -15,49 +15,28 @@ class NoteListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final id = noteWithCategory.note.id;
-    return Slidable(
-      actionPane: const SlidableDrawerActionPane(),
-      // actionExtentRatio: 0.25,
-      actions: [
-        IconSlideAction(
-            caption: 'Delete',
-            color: Colors.red,
-            icon: Icons.delete,
-            onTap: () => _homePageController.deleteNote(id)),
-      ],
-
-      secondaryActions: [
-        IconSlideAction(
-            caption: 'Pin',
-            color: Colors.yellow,
-            icon: Icons.push_pin_outlined,
-            onTap: () => _homePageController.togglePin(noteWithCategory.note))
-      ],
-
-      child: Card(
-        child: Obx(
-          () => ListTile(
-            leading: _buildTileLeading(id),
-            title: Text(noteWithCategory.note.title.isNotEmpty
-                ? noteWithCategory.note.title
-                : 'Tanpa Judul'),
-            subtitle: Text(MyHelper.truncate(noteWithCategory.note.body, 45)),
-            trailing: noteWithCategory.note.pinned
-                ? const Icon(Icons.push_pin)
-                : null,
-            onTap: () {
-              if (_homePageController.selectedIds.isEmpty) {
-                Get.to(() => NotePage(), arguments: id);
-              } else {
-                _homePageController.toggleSelected(id);
-              }
-            },
-            onLongPress: () {
+    return Card(
+      child: Obx(
+        () => ListTile(
+          leading: _buildTileLeading(id),
+          title: Text(noteWithCategory.note.title.isNotEmpty
+              ? noteWithCategory.note.title
+              : 'Tanpa Judul'),
+          subtitle: Text(MyHelper.truncate(noteWithCategory.note.body, 45)),
+          trailing:
+              noteWithCategory.note.pinned ? const Icon(Icons.push_pin) : null,
+          onTap: () {
+            if (_homePageController.selectedIds.isEmpty) {
+              Get.to(() => NotePage(), arguments: id);
+            } else {
               _homePageController.toggleSelected(id);
-            },
-            selectedTileColor: Colors.grey.shade300,
-            selected: _homePageController.isSelected(id),
-          ),
+            }
+          },
+          onLongPress: () {
+            _homePageController.toggleSelected(id);
+          },
+          selectedTileColor: Colors.grey.shade300,
+          selected: _homePageController.isSelected(id),
         ),
       ),
     );
