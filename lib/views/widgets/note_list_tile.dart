@@ -19,13 +19,20 @@ class NoteListTile extends StatelessWidget {
       child: Obx(
         () => ListTile(
           leading: _buildTileLeading(id),
-          title: Text(noteWithCategory.note.title.isNotEmpty
-              ? noteWithCategory.note.title
-              : 'Tanpa Judul'),
-          subtitle: Text(MyHelper.truncate(noteWithCategory.note.body, 45)),
+          title: Text(
+            noteWithCategory.note.title.isNotEmpty
+                ? noteWithCategory.note.title
+                : 'Tanpa Judul',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          subtitle: Text(
+            MyHelper.truncate(noteWithCategory.note.body, 45),
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
           trailing:
               noteWithCategory.note.pinned ? const Icon(Icons.push_pin) : null,
           onTap: () {
+            //jika ada note yang dipilih maka ontap yang seharusnya membuka note menjadi toggle
             if (_homePageController.selectedIds.isEmpty) {
               Get.to(() => NotePage(), arguments: id);
             } else {
