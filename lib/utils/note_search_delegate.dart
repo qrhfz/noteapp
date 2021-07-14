@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/services/moor_service.dart';
-import 'package:noteapp/views/widgets/note_list_tile.dart';
 
 class NoteSearchDelegate extends SearchDelegate<String> {
   MyDatabase db = Get.find();
