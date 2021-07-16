@@ -41,7 +41,7 @@ class NoteListTile extends StatelessWidget {
           onLongPress: () {
             _homePageController.toggleSelected(id);
           },
-          selectedTileColor: Colors.grey.shade300,
+          selectedTileColor: Colors.grey.shade200,
           selected: _homePageController.isSelected(id),
         ),
       ),
@@ -49,19 +49,37 @@ class NoteListTile extends StatelessWidget {
   }
 
   Widget? _buildTileLeading(int id) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (_homePageController.isSelected(id)) const Icon(Icons.check_box),
-        if (noteWithCategory.category != null)
-          Icon(
-            CategoryIconStyle
-                .noteCategoryIcons[noteWithCategory.category!.icon],
-            color: CategoryIconStyle
-                .noteCategoryColors[noteWithCategory.category!.color],
-            size: 32,
+    return SizedBox(
+      height: 40,
+      width: 40,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            child: (noteWithCategory.category != null)
+                ? Icon(
+                    CategoryIconStyle
+                        .noteCategoryIcons[noteWithCategory.category!.icon],
+                    color: CategoryIconStyle
+                        .noteCategoryColors[noteWithCategory.category!.color],
+                    size: 40,
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.grey.shade300),
+                  ),
           ),
-      ],
+          if (_homePageController.isSelected(id))
+            const Positioned(
+              right: 0,
+              bottom: 0,
+              child: Icon(
+                Icons.check_box,
+                size: 16,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
