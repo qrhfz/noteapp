@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:noteapp/consts/category_styles.dart';
 import 'package:noteapp/controllers/categories_controller.dart';
 import 'package:noteapp/services/moor_service.dart';
-import 'package:noteapp/views/dialogs/add_category_dialog.dart';
+import 'package:noteapp/views/pages/category_form_page.dart';
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({
@@ -71,7 +71,7 @@ class AppDrawer extends StatelessWidget {
       leading: const Icon(
         Icons.add,
       ),
-      onTap: () => Get.dialog(AddCategoryDialog()),
+      onTap: () => Get.to(() => CategoryForm()),
     );
   }
 

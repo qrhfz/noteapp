@@ -65,9 +65,18 @@ class HomePage extends StatelessWidget {
       if (_controller.selectedIds.isNotEmpty) {
         return Row(
           children: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.delete)),
             IconButton(
-                onPressed: () {}, icon: const Icon(Icons.push_pin_rounded))
+                onPressed: () => Get.defaultDialog(
+                    title: 'Konfirmasi Penghapusan',
+                    content: Text(
+                        'Anda ingin menghapus ${_controller.selectedIds.length} note'),
+                    onConfirm: () =>
+                        _controller.deleteAllNote().then((_) => Get.back()),
+                    onCancel: Get.back),
+                icon: const Icon(Icons.delete)),
+            IconButton(
+                onPressed: _controller.toggleAllPin,
+                icon: const Icon(Icons.push_pin_rounded))
           ],
         );
       }

@@ -14,8 +14,22 @@ class HomePageController extends GetxController {
     await db.deleteNote(id);
   }
 
-  Future<void> togglePin(Note entry) async {
-    return db.updateNote(entry.copyWith(pinned: !entry.pinned));
+  Future<void> deleteAllNote() async {
+    for (int i = 0; i < selectedIds.length; i++) {
+      await deleteNote(selectedIds[i]);
+    }
+    selectedIds.clear();
+  }
+
+  Future<void> togglePin(int id) async {
+    final note = await db.getNoteEntry(id);
+    return db.updateNote(note.copyWith(pinned: !note.pinned));
+  }
+
+  Future<void> toggleAllPin() async {
+    for (int i = 0; i < selectedIds.length; i++) {
+      await togglePin(selectedIds[i]);
+    }
   }
 
   bool isSelected(int id) {
