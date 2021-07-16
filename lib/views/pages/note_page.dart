@@ -19,7 +19,7 @@ class NotePage extends StatelessWidget {
       onWillPop: () async {
         if (controller.isChanged()) {
           bool pop = false;
-          await Get.defaultDialog<bool>(
+          await Get.defaultDialog(
               title: 'Note mu belum tersimpan',
               middleText: 'Simpan perubahan?',
               actions: [
