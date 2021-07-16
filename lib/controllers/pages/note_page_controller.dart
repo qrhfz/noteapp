@@ -14,6 +14,8 @@ class NotePageController extends GetxController {
   List<Category> categories = [];
   final titleText = TextEditingController();
   final bodyText = TextEditingController();
+  String? titleSnapshot;
+  String? bodySnapshot;
 
   NotePageController() {
     getCategories();
@@ -37,19 +39,26 @@ class NotePageController extends GetxController {
   Future<void> getNoteContent() async {
     try {
       note.value = await db.getNoteEntry(note.value.id);
-      titleText.text = note.value.title;
-      bodyText.text = note.value.body;
+
+      titleText.text = titleSnapshot = note.value.title;
+      bodyText.text = bodySnapshot = note.value.body;
       update();
     } on Exception catch (_) {
       // TODO
     }
   }
 
+  bool isChanged() {
+    print('JUDUL SNAP $titleSnapshot');
+    print('BODY SNAP $bodySnapshot');
+    return titleText.text != titleSnapshot || bodyText.text != bodySnapshot;
+  }
+
   Future<void> saveNote() async {
     log('ID: ${note.value.id}');
     if (note.value.id != 0) {
       log('SAVE NOTE: UPDATE');
-      return db.updateNote(note.value);
+      db.updateNote(note.value);
     } else {
       log('SAVE NOTE: SAVE ');
 
@@ -62,6 +71,7 @@ class NotePageController extends GetxController {
       );
       setId(id);
     }
+    getNoteContent();
   }
 
   void setId(int id) {
@@ -72,12 +82,10 @@ class NotePageController extends GetxController {
   void setTitle(String text) {
     log('SET TITLE');
     note.value = note.value.copyWith(title: text);
-    saveNote();
   }
 
   void setBody(String text) {
     log('SET Body');
     note.value = note.value.copyWith(body: text);
-    saveNote();
   }
 }

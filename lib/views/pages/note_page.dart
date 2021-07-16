@@ -15,25 +15,64 @@ class NotePage extends StatelessWidget {
       controller.getNoteContent();
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('View Note'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: GetBuilder<NotePageController>(
-            init: controller,
-            builder: (value) {
-              return Column(
-                children: [
-                  _categoryChoice(),
-                  _buildTextFieldTitle(),
-                  const SizedBox(height: 8),
-                  _buildTextFieldBody(),
-                ],
-              );
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        print(controller.isChanged());
+        if (controller.isChanged()) {
+          bool pop = false;
+          await Get.defaultDialog(
+              title: 'Note mu belum tersimpan',
+              middleText: 'Simpan perubahan?',
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      controller.saveNote();
+                      pop = true;
+                      Get.back();
+                    },
+                    child: const Text('Ya')),
+                TextButton(
+                    onPressed: () {
+                      pop = true;
+                      Get.back();
+                    },
+                    child: const Text('Tidak')),
+                TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text('Batal')),
+              ]);
+
+          return pop;
+        }
+
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('View Note'),
+          actions: [
+            IconButton(
+                onPressed: controller.saveNote, icon: const Icon(Icons.save))
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: GetBuilder<NotePageController>(
+              init: controller,
+              builder: (value) {
+                return Column(
+                  children: [
+                    _categoryChoice(),
+                    _buildTextFieldTitle(),
+                    const SizedBox(height: 8),
+                    _buildTextFieldBody(),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
