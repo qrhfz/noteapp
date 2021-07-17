@@ -49,8 +49,6 @@ class NotePageController extends GetxController {
   }
 
   bool isChanged() {
-    print('JUDUL SNAP $titleSnapshot');
-    print('BODY SNAP $bodySnapshot');
     return titleText.text != titleSnapshot || bodyText.text != bodySnapshot;
   }
 

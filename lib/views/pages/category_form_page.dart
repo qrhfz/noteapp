@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noteapp/consts/category_styles.dart';
-import 'package:noteapp/controllers/categories_controller.dart';
 import 'package:noteapp/controllers/pages/category_form_controller.dart';
 
 class CategoryForm extends StatelessWidget {
   CategoryForm({Key? key}) : super(key: key);
-  final c = Get.put(CategoryFormController());
+  final _controller = Get.put(CategoryFormController());
   final TextEditingController _namaKategori = TextEditingController();
-  final CategoriesController _categoriesController =
-      Get.put(CategoriesController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,62 +23,60 @@ class CategoryForm extends StatelessWidget {
             children: [
               TextField(
                 controller: _namaKategori,
+                onChanged: (value) => _controller.name.value = value,
                 decoration: const InputDecoration(hintText: 'Nama Kategory'),
               ),
               const SizedBox(
                 height: 8,
               ),
-              Text(
-                'Icon',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Obx(
-                () => Wrap(
-                  children: CategoryIconStyle.noteCategoryIcons.entries
-                      .map(
-                        (e) => ChoiceChip(
-                          avatar: Icon(e.value),
-                          label: Text(e.key),
-                          selected: c.selectedIcon.value == e.key,
-                          onSelected: (selected) {
-                            c.selectedIcon.value = e.key;
-                          },
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-              Text(
-                'Warna',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Obx(
-                () => Wrap(
-                  children: CategoryIconStyle.noteCategoryColors.entries
-                      .map((e) => ChoiceChip(
-                            avatar: Container(
-                              color: e.value,
-                              width: 16,
-                              height: 16,
-                            ),
-                            label: Text(e.key),
-                            selected: c.selectedColor.value == e.key,
-                            onSelected: (selected) {
-                              c.selectedColor.value = e.key;
-                            },
-                          ))
-                      .toList(),
-                ),
-              ),
+              Text('Icon', style: Theme.of(context).textTheme.headline6),
+              Obx(() => _selectIcon()),
+              Text('Warna', style: Theme.of(context).textTheme.headline6),
+              Obx(() => _selectColor()),
               ElevatedButton(
                   onPressed: () {
-                    _categoriesController.addCategory(_namaKategori.text,
-                        c.selectedIcon.value, c.selectedColor.value);
+                    _controller.add();
                     Get.back();
                   },
                   child: const Text('Tambah'))
             ],
           )),
+    );
+  }
+
+  Wrap _selectColor() {
+    return Wrap(
+      children: CategoryIconStyle.noteCategoryColors.entries
+          .map((color) => ChoiceChip(
+                avatar: Container(
+                  color: color.value,
+                  width: 16,
+                  height: 16,
+                ),
+                label: Text(color.key),
+                selected: _controller.selectedColor.value == color.key,
+                onSelected: (selected) {
+                  _controller.selectedColor.value = color.key;
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  Wrap _selectIcon() {
+    return Wrap(
+      children: CategoryIconStyle.noteCategoryIcons.entries
+          .map(
+            (icon) => ChoiceChip(
+              avatar: Icon(icon.value),
+              label: Text(icon.key),
+              selected: _controller.selectedIcon.value == icon.key,
+              onSelected: (selected) {
+                _controller.selectedIcon.value = icon.key;
+              },
+            ),
+          )
+          .toList(),
     );
   }
 }

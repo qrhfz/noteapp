@@ -16,38 +16,7 @@ class NotePage extends StatelessWidget {
     }
 
     return WillPopScope(
-      onWillPop: () async {
-        if (controller.isChanged()) {
-          bool pop = false;
-          await Get.defaultDialog(
-              title: 'Note mu belum tersimpan',
-              middleText: 'Simpan perubahan?',
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      controller.saveNote();
-                      pop = true;
-                      Get.back();
-                    },
-                    child: const Text('Ya')),
-                TextButton(
-                    onPressed: () {
-                      pop = true;
-                      Get.back();
-                    },
-                    child: const Text('Tidak')),
-                TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: const Text('Batal')),
-              ]);
-
-          return pop;
-        }
-
-        return true;
-      },
+      onWillPop: _onNotePagePop,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('View Note'),
@@ -76,6 +45,39 @@ class NotePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<bool> _onNotePagePop() async {
+    if (controller.isChanged()) {
+      bool pop = false;
+      await Get.defaultDialog(
+          title: 'Note mu belum tersimpan',
+          middleText: 'Simpan perubahan?',
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  controller.saveNote();
+                  pop = true;
+                  Get.back();
+                },
+                child: const Text('Ya')),
+            TextButton(
+                onPressed: () {
+                  pop = true;
+                  Get.back();
+                },
+                child: const Text('Tidak')),
+            TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('Batal')),
+          ]);
+
+      return pop;
+    }
+
+    return true;
   }
 
   Widget _categoryChoice() {

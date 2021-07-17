@@ -15,4 +15,7 @@ class CategoriesController {
 
   Stream<List<Category>> watchCategories() => db.watchCategoryEntries;
   Future<List<Category>> getCategories() => db.allCategoryEntries;
+  Future<void> delete(int id) async {
+    await db.deleteCategory(id);
+  }
 }

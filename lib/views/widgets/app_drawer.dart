@@ -39,7 +39,7 @@ class AppDrawer extends StatelessWidget {
                   } else if (index == 2) {
                     return const Divider();
                   }
-                  return _categoryTile(categories, index);
+                  return _categoryTile(categories[index - 3]);
                 },
               );
             } else {
@@ -54,14 +54,23 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  ListTile _categoryTile(List<Category> categories, int index) {
+  ListTile _categoryTile(Category category) {
     return ListTile(
       leading: Icon(
-        CategoryIconStyle.noteCategoryIcons[categories[index - 3].icon],
-        color:
-            CategoryIconStyle.noteCategoryColors[categories[index - 3].color],
+        CategoryIconStyle.noteCategoryIcons[category.icon],
+        color: CategoryIconStyle.noteCategoryColors[category.color],
       ),
-      title: Text(categories[index - 3].name),
+      title: Text(category.name),
+      trailing: InkWell(
+        onTap: () async {
+          await Get.dialog(CategoryMoreDialog(id: category.id));
+        },
+        customBorder: const CircleBorder(),
+        child: Container(
+          decoration: const BoxDecoration(shape: BoxShape.circle),
+          child: const Icon(Icons.more_vert),
+        ),
+      ),
     );
   }
 
@@ -77,10 +86,11 @@ class AppDrawer extends StatelessWidget {
 
   DrawerHeader _drawerHeader(BuildContext ctx) {
     return DrawerHeader(
-        padding: EdgeInsets.zero,
-        child: Container(
-          color: Theme.of(ctx).primaryColor,
-          child: Stack(children: [
+      padding: EdgeInsets.zero,
+      child: Container(
+        color: Theme.of(ctx).primaryColor,
+        child: Stack(
+          children: [
             Positioned(
               bottom: 8,
               left: 8,
@@ -89,7 +99,41 @@ class AppDrawer extends StatelessWidget {
                 style: Theme.of(ctx).accentTextTheme.headline5,
               ),
             )
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CategoryMoreDialog extends StatelessWidget {
+  CategoryMoreDialog({Key? key, required this.id}) : super(key: key);
+  final int id;
+  final CategoriesController _categoriesController = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 250,
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ListTile(
+                title: Text('Ubah'),
+              ),
+              ListTile(
+                title: const Text('Hapus'),
+                onTap: () async {
+                  await _categoriesController.delete(id);
+                  Get.back();
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

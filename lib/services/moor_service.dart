@@ -33,7 +33,7 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  // BUAT NOTE MULAI
+  // UNTUK NOTE MULAI
   Stream<List<NoteWithCategory>> get allNoteEntries {
     final query = select(notes).join(
       [leftOuterJoin(categories, categories.id.equalsExp(notes.category))],
@@ -76,7 +76,7 @@ class MyDatabase extends _$MyDatabase {
         .get();
   }
 
-  // BUAT NOTE SELESAI
+  // UNTUK NOTE SELESAI
 
   Future<int> addCategory(CategoriesCompanion entry) {
     log('TAMBAH KATEGORI');
@@ -86,4 +86,7 @@ class MyDatabase extends _$MyDatabase {
 
   Stream<List<Category>> get watchCategoryEntries => select(categories).watch();
   Future<List<Category>> get allCategoryEntries => select(categories).get();
+  Future<void> deleteCategory(int id) {
+    return (delete(categories)..where((t) => t.id.equals(id))).go();
+  }
 }
